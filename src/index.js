@@ -9,6 +9,12 @@ const PORT = process.env.PORT
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
+
+    const keepAliveInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+          ws.send('keep-alive');
+      }
+  }, 30000);
   
   ws.on('message', (message)=>{
     onMessage(message, ws)
@@ -33,6 +39,7 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
       console.log('Client disconnected');
+      clearInterval(keepAliveInterval);
       redisSubscriber.unsubscribe(channel);
       });
   }
