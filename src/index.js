@@ -1,5 +1,5 @@
 const WebSocket = require('ws')
-const redisSubscriber = require('./db/redis');
+// const redisSubscriber = require('./db/redis');
 
 const addToSqs = require('./sqs');
 const server = require('./app');
@@ -9,6 +9,7 @@ const PORT = process.env.PORT
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    const redisSubscriber = require('./db/redis');
 
     const keepAliveInterval = setInterval(() => {
       if (ws.readyState === WebSocket.OPEN) {
@@ -24,7 +25,7 @@ wss.on('connection', (ws) => {
     redisSubscriber.unsubscribe(channel);
     clearInterval(keepAliveInterval);
     });
-    
+
   })
 
   const onMessage = (message, ws) =>{
