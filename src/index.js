@@ -21,7 +21,7 @@ wss.on('connection', (ws) => {
   })
   })
 
-  const onMessage = (message, ws, interval) =>{
+  const onMessage = (message, ws) =>{
     const messageToSend = composeMessage(message)
     handleMessage(messageToSend)
 
@@ -39,7 +39,7 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
       console.log('Client disconnected');
-      redisSubscriber.unsubscribe(channel);
+      // redisSubscriber.unsubscribe(channel);
       // clearInterval(interval);
       });
   }
