@@ -10,18 +10,18 @@ const PORT = process.env.PORT
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
-  //   const keepAliveInterval = setInterval(() => {
-  //     if (ws.readyState === WebSocket.OPEN) {
-  //         ws.send(JSON.stringify("keepAlive"));
-  //     }
-  // }, 30000);
+    const keepAliveInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify("keepAlive"));
+      }
+  }, 30000);
   
   ws.on('message', (message)=>{
-    onMessage(message, ws)
+    onMessage(message, ws,keepAliveInterval)
   })
   })
 
-  const onMessage = (message, ws) =>{
+  const onMessage = (message, ws,interval) =>{
     const messageToSend = composeMessage(message)
     handleMessage(messageToSend)
 
@@ -39,8 +39,8 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
       console.log('Client disconnected');
-      // redisSubscriber.unsubscribe(channel);
-      // clearInterval(interval);
+      redisSubscriber.unsubscribe(channel);
+      clearInterval(interval);
       });
   }
 
